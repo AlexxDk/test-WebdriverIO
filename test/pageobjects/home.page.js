@@ -1,4 +1,3 @@
-import { $ } from '@wdio/globals'
 import BasePage from './base.page.js';
 
 class HomePage extends BasePage {
@@ -20,6 +19,7 @@ class HomePage extends BasePage {
     get facebookIcon() { return $('.social_facebook'); }
     get checkoutButton() { return $('#checkout'); }
     get removeButton() { return $('#remove-sauce-labs-backpack'); }
+    get errorMessage() { return $('.error-message-container'); }
 
     async openMenu() {
         await $('#react-burger-menu-btn').click();

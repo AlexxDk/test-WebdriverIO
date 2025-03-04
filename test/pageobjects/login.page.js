@@ -1,4 +1,3 @@
-import { $, expect } from '@wdio/globals'
 import BasePage from './base.page.js';
 
 class LoginPage extends BasePage {
@@ -33,7 +32,6 @@ class LoginPage extends BasePage {
     }
 
     async isFieldHighlighted(inputField) {
-         // return this.inputField.getCSSProperty('border-bottom-color').value === 'rgb(226, 35, 26)';
         const className = await inputField.getAttribute('class');
         return className.includes('input_error') ;
     }

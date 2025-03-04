@@ -18,6 +18,10 @@ class LoginPage extends BasePage {
 
     async login(username, password) {
         await this.fillLoginForm(username, password);
+        await this.clickOnLoginButton();
+    }
+
+    async clickOnLoginButton() {
         await this.btnLogin.click();
     }
 

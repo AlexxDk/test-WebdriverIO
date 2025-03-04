@@ -11,11 +11,11 @@ describe('Cart', () => {
     });
 
     it('Saving the card after logout ', async () => { 
-        const productName = await homePage.productNames[0].getText();
-        const currentQuantityInCart = parseInt(await homePage.shoppingCartBadge.getText(), 10) || 0;
+        const productName = await homePage.getTextForProduct(0);
+        const currentQuantityInCart = await homePage.getCurrentQuantityInCart();
 
-        await homePage.addToCartButton[0].click();
-        const newQuantityInCart = parseInt(await homePage.shoppingCartBadge.getText(), 10);
+        await homePage.clickOnAddToCartButton(0);
+        const newQuantityInCart = parseInt(await homePage.getTextForShoppingCartBadge(), 10);
         expect(newQuantityInCart).toBe(currentQuantityInCart + 1)
 
         await homePage.openMenu();
@@ -27,11 +27,11 @@ describe('Cart', () => {
         await loginPage.login('standard_user', 'secret_sauce');
         expect(await homePage.areProductsDisplayed()).toBe(true);
 
-        await homePage.shoppingCartBadge.click();
+        await homePage.clickOnShoppingCartBadge();
         expect(await browser).toHaveUrl('https://www.saucedemo.com/cart.html');
         await homePage.assertCartContains(productName);
 
-        await homePage.removeButton.click();
+        await homePage.clickOnRemoveButton();
       
     });
 
@@ -86,41 +86,41 @@ describe('Cart', () => {
     });
 
     it('Valid Checkout', async () => { 
-        const productName = await homePage.productNames[0].getText();
-        const currentQuantityInCart = parseInt(await homePage.shoppingCartBadge.getText(), 10) || 0;
+        const productName = await homePage.getTextForProduct(0);
+        const currentQuantityInCart = await homePage.getCurrentQuantityInCart();
 
-        await homePage.addToCartButton[0].click();
+        await homePage.clickOnAddToCartButton(0);
 
-        const newQuantityInCart = parseInt(await homePage.shoppingCartBadge.getText(), 10);
+        const newQuantityInCart = parseInt(await homePage.getTextForShoppingCartBadge(), 10);
         expect(newQuantityInCart).toBe(currentQuantityInCart + 1);
 
-        await homePage.shoppingCartBadge.click();
+        await homePage.clickOnShoppingCartBadge();
         expect(await browser).toHaveUrl('https://www.saucedemo.com/cart.html');
         await homePage.assertCartContains(productName);
 
         const productPrice = await checkoutPage.getProductPrice(homePage.productPrices[0]);
 
-        await homePage.checkoutButton.click();
+        await homePage.clickOnCheckoutButton();
         expect(await browser).toHaveUrl('https://www.saucedemo.com/checkout-step-one.html');
 
         await checkoutPage.fillCheckoutForm(testDataGeneration.randomFirstName(), testDataGeneration.randomLastName(), testDataGeneration.randomZipCode());
-        await checkoutPage.continueButton.click();
+        await checkoutPage.continue();
         expect(await browser).toHaveUrl('https://www.saucedemo.com/checkout-step-two.html');
 
         await expect(productPrice).toBe(await checkoutPage.getCheckoutItemTotal());
-        await checkoutPage.finishButton.click();
+        await checkoutPage.finish()
         expect(await browser).toHaveUrl('https://www.saucedemo.com/checkout-complete.html');
         expect(await checkoutPage.getCompleteHeader()).toBe('Thank you for your order!');
         await checkoutPage.backHome();
         expect(await browser).toHaveUrl('https://www.saucedemo.com/inventory.html');
-        expect(await homePage.shoppingCartBadge.getText()).toBe('');
+        expect(await homePage.getTextForShoppingCartBadge()).toBe('');
     });
 
     it('Checkout without products', async () => {
-        await homePage.shoppingCartBadge.click();
+        await homePage.clickOnShoppingCartBadge();
         expect(await browser).toHaveUrl('https://www.saucedemo.com/cart.html');
         await expect(homePage.cartItem).not.toBeDisplayed();
-        await homePage.checkoutButton.click();
-        await expect(homePage.errorMessage.getText()).toBe('Cart is empty');
+        await homePage.clickOnCheckoutButton();
+        await expect(homePage.getTextForErrorMessage()).toBe('Cart is empty');
     });
 });

@@ -38,6 +38,38 @@ class HomePage extends BasePage {
         expect(await this.sidebarItems.length).toBe(amount); 
     }
 
+    async clickOnAddToCartButton(index) {
+        await this.addToCartButton[index].click();
+    }
+
+    async clickOnRemoveButton() {
+        await this.removeButton.click();
+    }
+
+    async clickOnShoppingCartBadge() {
+        await this.shoppingCartBadge.click();
+    }
+
+    async clickOnCheckoutButton() {
+        await this.checkoutButton.click();
+    }
+
+    async getTextForProduct(index) {
+        return this.productNames[index].getText();
+    }
+
+    async getTextForShoppingCartBadge() {
+        return this.shoppingCartBadge.getText();
+    }
+
+    async getTextForErrorMessage() {
+        return await this.errorMessage.getText();
+    }
+
+    async getCurrentQuantityInCart() {
+        return parseInt(await this.getTextForShoppingCartBadge(), 10) || 0;
+    }
+
     async logout() {
         await $('#logout_sidebar_link').click();
     }

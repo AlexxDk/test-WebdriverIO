@@ -9,14 +9,14 @@ describe('My Login application', () => {
     it('Valid Login', async () => {
         await loginPage.fillLoginForm('standard_user', 'secret_sauce');
         await loginPage.assertLoginDataIsRepresentedITheField('standard_user', 'secret_sauce');
-        await loginPage.btnLogin.click();
+        await loginPage.clickOnLoginButton();
         await homePage.assertUserLoggedIn();
     });
 
     it('Login with invalid password', async () => {
         await loginPage.fillLoginForm('standard_user', 'secret500');
         await loginPage.assertLoginDataIsRepresentedITheField('standard_user', 'secret500');
-        await loginPage.btnLogin.click();
+        await loginPage.clickOnLoginButton();
         await loginPage.assertFieldValidationFor(loginPage.inputUsername);
         await loginPage.assertFieldValidationFor(loginPage.inputPassword);
         await loginPage.assertLoginError(
